@@ -7,6 +7,7 @@ import { order, orderCmd } from "./commands/order.js"
 import { setNick, setNickCmd } from "./commands/setNick.js";
 import { how, howCmd } from "./commands/how.js";
 import { deleteMsg, deleteMsgCmd } from "./commands/delete.js";
+import { torture, tortureCmd } from "./commands/torture.js";
 
 //* constants
 const TOKEN = process.env.DC_BOT_TOKEN
@@ -29,6 +30,13 @@ const rest = new REST({ version: '10' }).setToken(TOKEN)
 
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}`)
+    client.user.setPresence({
+        status: 'idle',
+        activity: {
+            name: 'Être un bon esclave pour son propriétaire',
+            type: 'PLAYING',
+        }
+    })
 })
 
 client.on("messageCreate", (message) => {
@@ -59,6 +67,10 @@ client.on("interactionCreate", (interaction) => {
             case "delete":
                 deleteMsg(interaction)
                 break
+
+            case "torture":
+                torture(interaction)
+                break
         }
     }
 })
@@ -70,7 +82,8 @@ async function main() {
         orderCmd.toJSON(),
         setNickCmd.toJSON(),
         howCmd.toJSON(),
-        deleteMsgCmd.toJSON()
+        deleteMsgCmd.toJSON(),
+        tortureCmd.toJSON()
     ]
 
     try {
